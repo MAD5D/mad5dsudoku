@@ -1,0 +1,11 @@
+{
+  "name": "mad5dsudoku",
+  "version": "1.0.11",
+  "description": "Create valid sudoku",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

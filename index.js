@@ -2,6 +2,7 @@ const sudoku = require('./sudoku.js');
 
 exports.test = function() {
   console.log("Ok");
+  return "OK";
 }
 
 exports.creer_combo_sudoku_36_36 = function(){
@@ -290,9 +291,14 @@ exports.creer_combo_sudoku_36_36 = function(){
 
 exports.creer_combo_sudoku = creer_combo_sudoku_f;
 
-function creer_combo_sudoku_f(){
+function creer_combo_sudoku_f(object = false){
 	let Sudoku_9x9 = sudoku.Sudoku(9,9);
-	return [Sudoku_9x9.tableau_sudoku,Sudoku_9x9.tableau_sudoku_avec_case_vide];
+	if(object){
+		return Sudoku_9x9;
+	}
+	else{
+		return [Sudoku_9x9.tableau_sudoku,Sudoku_9x9.tableau_sudoku_avec_case_vide];
+	}
 }
 
 exports.creer_combo_sudoku_4_4 = creer_combo_sudoku_4_4_f;

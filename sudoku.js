@@ -4,10 +4,51 @@ exports.Sudoku = function Sudoku(largeur,hauteur){
 	this.tableau_sudoku = new Array(this.largeur*this.hauteur).fill(0);
 	this.tableau_sudoku_avec_case_vide;
 
+	this.verification_horizontal = function(tableau_a_check,tableau_valeur_possible,case_courante){
+		let indice_a_enlever;
+		let case_minimal_a_check = Math.floor(case_courante/this.largeur)*this.largeur;
+
+		for(let k = 0;k < this.largeur ;k++){
+			indice_a_enlever = tableau_valeur_possible.indexOf(tableau_a_check[case_minimal_a_check+k]);//ligne
+			if(indice_a_enlever != -1){
+				tableau_valeur_possible.splice(indice_a_enlever, 1);
+			}
+		}
+	}
+
+	this.verification_vertical = function(tableau_a_check,tableau_valeur_possible,case_courante){
+		let indice_a_enlever;
+		let decalage_colonne = case_courante % this.hauteur;
+
+		for(let k = 0;k < this.hauteur ;k++){
+			indice_a_enlever = tableau_valeur_possible.indexOf(tableau_a_check[decalage_colonne+(k*this.hauteur)]);
+			if(indice_a_enlever != -1){
+				tableau_valeur_possible.splice(indice_a_enlever, 1);
+			}
+		}
+	}
+
+	//a vérifier au niveau des hauteurs / largeurs si largeur != hauteur
+	this.verification_blok = function(tableau_a_check,tableau_valeur_possible,case_courante){
+		let indice_a_enlever;
+		let X = Math.floor((case_courante % this.hauteur) / Math.sqrt(this.hauteur)) * Math.sqrt(this.hauteur); // Block axe X (horizontal)
+		let Y = Math.floor(case_courante / this.hauteur / Math.sqrt(this.hauteur)) * Math.sqrt(this.hauteur); // Block axe Y (vertical)
+		let case_depart_blok = X+(Y*this.hauteur)
+		for(let k = 0; k < this.hauteur; k++){
+			let l = Math.floor(k / Math.sqrt(this.hauteur));
+			let m = k % Math.sqrt(this.hauteur);
+			indice_a_enlever = tableau_valeur_possible.indexOf(tableau_a_check[case_depart_blok+m+(l*this.hauteur)]);
+			if(indice_a_enlever != -1){
+				tableau_valeur_possible.splice(indice_a_enlever, 1)
+			}
+		}
+	}
+
 	this.creer_grille = function(){
 		let case_courante = 0;//const arr = new Array(81).fill(0);
-		
-		let tableau_sudoku_valeur_possible = new Array(this.largeur*this.hauteur).fill(0);
+		let nombre_de_case = this.largeur*this.hauteur;
+
+		let tableau_sudoku_valeur_possible = new Array().fill(0);
 		//tableau_sudoku_valeur_possible[case_courante] = [1,2,3,4,5,6,7,8,9];
 		tableau_sudoku_valeur_possible[case_courante] = [];
 
@@ -15,11 +56,11 @@ exports.Sudoku = function Sudoku(largeur,hauteur){
 			tableau_sudoku_valeur_possible[case_courante].push(i);
 		}
 
-		while(case_courante < 81){
+		while(case_courante < nombre_de_case){
 			//Vérification horizontale
-			verification_horizontal(this.tableau_sudoku,tableau_sudoku_valeur_possible[case_courante],case_courante);
-			verification_vertical(this.tableau_sudoku,tableau_sudoku_valeur_possible[case_courante],case_courante);
-			verification_blok(this.tableau_sudoku,tableau_sudoku_valeur_possible[case_courante],case_courante);
+			this.verification_horizontal(this.tableau_sudoku,tableau_sudoku_valeur_possible[case_courante],case_courante);
+			this.verification_vertical(this.tableau_sudoku,tableau_sudoku_valeur_possible[case_courante],case_courante);
+			this.verification_blok(this.tableau_sudoku,tableau_sudoku_valeur_possible[case_courante],case_courante);
 
 			//////FIN VERIF
 			if(tableau_sudoku_valeur_possible[case_courante].length > 0){
@@ -27,10 +68,14 @@ exports.Sudoku = function Sudoku(largeur,hauteur){
 				
 				this.tableau_sudoku[case_courante] = tableau_sudoku_valeur_possible[case_courante][chiffre];
 				case_courante++;
-				if(case_courante >= 81){
-					return this.tableau_sudoku;
+				if(case_courante >= nombre_de_case){
+					return true;
 				}else{
-					tableau_sudoku_valeur_possible[case_courante] = [1,2,3,4,5,6,7,8,9];
+					tableau_sudoku_valeur_possible[case_courante] = [];
+
+					for(let i = 1;i <= this.hauteur;i++){//Attention : ne fonctionne que sur les sudokus de taille N*N
+						tableau_sudoku_valeur_possible[case_courante].push(i);
+					}
 				}
 			}
 			else{
@@ -46,63 +91,26 @@ exports.Sudoku = function Sudoku(largeur,hauteur){
 		}
 	}
 
-	function verification_horizontal(tableau_a_check,tableau_valeur_possible,case_courante){
-		let indice_a_enlever;
-		let case_minimal_a_check = Math.floor(case_courante/9)*9;
-
-		for(let k = 0;k < 9 ;k++){
-			indice_a_enlever = tableau_valeur_possible.indexOf(tableau_a_check[case_minimal_a_check+k]);//ligne
-			if(indice_a_enlever != -1){
-				tableau_valeur_possible.splice(indice_a_enlever, 1);
-			}
-		}
-	}
-
-	function verification_vertical(tableau_a_check,tableau_valeur_possible,case_courante){
-		let decalage_colonne = case_courante % 9;
-
-		for(let k = 0;k < 9 ;k++){
-			indice_a_enlever = tableau_valeur_possible.indexOf(tableau_a_check[decalage_colonne+(k*9)]);
-			if(indice_a_enlever != -1){
-				tableau_valeur_possible.splice(indice_a_enlever, 1);
-			}
-		}
-	}
-
-	function verification_blok(tableau_a_check,tableau_valeur_possible,case_courante,affiche = false){
-		let X = Math.floor((case_courante % 9) / 3) * 3; // Block axe X (horizontal)
-		let Y = Math.floor(case_courante / 9 / 3) * 3; // Block axe Y (vertical)
-		let case_depart_blok = X+(Y*9)
-		for(let k = 0; k < 9; k++){
-			let l = Math.floor(k / 3);
-			let m = k % 3;
-			indice_a_enlever = tableau_valeur_possible.indexOf(tableau_a_check[case_depart_blok+m+(l*9)]);
-			if(indice_a_enlever != -1){
-				tableau_valeur_possible.splice(indice_a_enlever, 1)
-			}
-		}
-	}
-
-	function enlever_45_case_au_hasard(tableau_sudoku){
-		let tableau_sudoku_avec_case_vide = [ ... tableau_sudoku];
+	this.enlever_X_case_au_hasard = function(nb_case){
+		let tableau_sudoku_avec_case_vide = [ ... this.tableau_sudoku];
 
 		let i = 0;
-		while(i < 45){
-			let case_a_vider = (Math.floor(Math.random() * 81));
+		while(i < nb_case){
+			let case_a_vider = (Math.floor(Math.random() * this.largeur*this.hauteur));
 			if(tableau_sudoku_avec_case_vide[case_a_vider] == ""){
 			}
 			else{
 				tableau_sudoku_avec_case_vide[case_a_vider] = "";
-				i++;	
+				i++;
 			}
 		}
 		return tableau_sudoku_avec_case_vide;
 	}
 
-	function resoudre_le_sudoku_methode_facile(tableau_sudoku_avec_case_vide_a){
-		let tableau_sudoku_avec_case_vide = [ ... tableau_sudoku_avec_case_vide_a];
-		let sol_tableau_sudoku_editable = new Array(81).fill(0);
-		let sol_tableau_sudoku_indice_maitre = new Array(81).fill(0);
+	this.resoudre_le_sudoku_methode_facile = function(){
+		let tableau_sudoku_avec_case_vide = [ ... this.tableau_sudoku_avec_case_vide];
+		let sol_tableau_sudoku_editable = new Array(this.largeur*this.hauteur).fill(0);
+		let sol_tableau_sudoku_indice_maitre = new Array(this.largeur*this.hauteur).fill(0);
 
 		let i;
 		let valeur_trouve = true;
@@ -111,9 +119,9 @@ exports.Sudoku = function Sudoku(largeur,hauteur){
 			i = 0;
 			nb_case_vide = 0;
 			valeur_trouve = false;
-			while(i < 81){
+			while(i < this.largeur*this.hauteur){
 				if(tableau_sudoku_avec_case_vide[i] == ""){
-					sol_tableau_sudoku_indice_maitre[i] = valeur_possible(tableau_sudoku_avec_case_vide,i);
+					sol_tableau_sudoku_indice_maitre[i] = this.valeur_possible(tableau_sudoku_avec_case_vide,i);
 					nb_case_vide++;
 				}
 				else{
@@ -122,7 +130,7 @@ exports.Sudoku = function Sudoku(largeur,hauteur){
 				i++;
 			}
 			i = 0;
-			while(i < 81){
+			while(i < this.largeur*this.hauteur){
 				if(Array.isArray(sol_tableau_sudoku_indice_maitre[i])){
 					if(sol_tableau_sudoku_indice_maitre[i].length == 1){
 						tableau_sudoku_avec_case_vide[i] = sol_tableau_sudoku_indice_maitre[i][0];
@@ -142,13 +150,19 @@ exports.Sudoku = function Sudoku(largeur,hauteur){
 		}
 	}
 
-	function valeur_possible(tableau_sudoku_avec_case_vide,case_courante){
+	this.valeur_possible = function(tableau_sudoku_avec_case_vide,case_courante){
 		let indice_a_enlever;
-		let liste_valeur_possible = [1,2,3,4,5,6,7,8,9];
+		//let liste_valeur_possible = [1,2,3,4,5,6,7,8,9];
 
-		verification_horizontal(tableau_sudoku_avec_case_vide,liste_valeur_possible,case_courante);
-		verification_vertical(tableau_sudoku_avec_case_vide,liste_valeur_possible,case_courante);
-		verification_blok(tableau_sudoku_avec_case_vide,liste_valeur_possible,case_courante);
+		let liste_valeur_possible = [];
+
+		for(let i = 1;i <= this.hauteur;i++){//Attention : ne fonctionne que sur les sudokus de taille N*N
+			liste_valeur_possible.push(i);
+		}
+
+		this.verification_horizontal(tableau_sudoku_avec_case_vide,liste_valeur_possible,case_courante);
+		this.verification_vertical(tableau_sudoku_avec_case_vide,liste_valeur_possible,case_courante);
+		this.verification_blok(tableau_sudoku_avec_case_vide,liste_valeur_possible,case_courante);
 
 		return liste_valeur_possible;
 	}
@@ -158,12 +172,19 @@ exports.Sudoku = function Sudoku(largeur,hauteur){
 	let sudoku_realise = 0;
 
 	while(sudoku_realise == 0){
-		let tempo = "";		
-		this.tableau_sudoku_avec_case_vide  = [ ... enlever_45_case_au_hasard(this.tableau_sudoku)];
-		if(resoudre_le_sudoku_methode_facile(this.tableau_sudoku_avec_case_vide) !== false){
+		let tempo = "";
+		if(this.largeur*this.hauteur == 81){
+			this.tableau_sudoku_avec_case_vide = [ ... this.enlever_X_case_au_hasard(45)];
+		}
+		else if(this.largeur*this.hauteur == 16){
+			this.tableau_sudoku_avec_case_vide = [ ... this.enlever_X_case_au_hasard(10)];
+		}
+
+		if(this.resoudre_le_sudoku_methode_facile() !== false){
 			sudoku_realise = 1;
 		}
 	}
+	
 
 	return this;
 }

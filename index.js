@@ -287,165 +287,19 @@ exports.creer_combo_sudoku_36_36 = function(){
 }
 
 
+
+exports.creer_combo_sudoku = creer_combo_sudoku_f;
+
+function creer_combo_sudoku_f(){
+	let Sudoku_9x9 = sudoku.Sudoku(9,9);
+	return [Sudoku_9x9.tableau_sudoku,Sudoku_9x9.tableau_sudoku_avec_case_vide];
+}
+
 exports.creer_combo_sudoku_4_4 = creer_combo_sudoku_4_4_f;
 
 function creer_combo_sudoku_4_4_f(){
-	function verification_horizontal(tableau_a_check,tableau_valeur_possible,case_courante){
-		let indice_a_enlever;
-		let case_minimal_a_check = Math.floor(case_courante/4)*4;
-
-		for(let k = 0;k < 4 ;k++){
-			indice_a_enlever = tableau_valeur_possible.indexOf(tableau_a_check[case_minimal_a_check+k]);
-			if(indice_a_enlever != -1){
-				tableau_valeur_possible.splice(indice_a_enlever, 1);
-			}
-		}
-	}
-
-	function verification_vertical(tableau_a_check,tableau_valeur_possible,case_courante){
-		let decalage_colonne = case_courante % 4;
-
-		for(let k = 0;k < 4 ;k++){
-			indice_a_enlever = tableau_valeur_possible.indexOf(tableau_a_check[decalage_colonne+(k*4)]);
-			if(indice_a_enlever != -1){
-				tableau_valeur_possible.splice(indice_a_enlever, 1);
-			}
-		}
-	}
-
-	function verification_blok(tableau_a_check,tableau_valeur_possible,case_courante,affiche = false){
-		let X = Math.floor((case_courante % 4) / 2) * 2; // Block axe X (horizontal)
-		let Y = Math.floor(case_courante / 4 / 2) * 2; // Block axe Y (vertical)
-		let case_depart_blok = X+(Y*4)
-		for(let k = 0; k < 4; k++){
-			let l = Math.floor(k / 2);
-			let m = k % 2;
-			indice_a_enlever = tableau_valeur_possible.indexOf(tableau_a_check[case_depart_blok+m+(l*4)]);
-			if(indice_a_enlever != -1){
-				tableau_valeur_possible.splice(indice_a_enlever, 1)
-			}                
-		}
-	}
-
-  let case_courante = 0;
-  let tableau_sudoku = new Array(16).fill(0);
-  let tableau_sudoku_valeur_possible = new Array(16).fill(0);
-  let tableau_sudoku_valeur_editable = new Array(16).fill(0);
-  let tableau_sudoku_avec_case_vide;
-  let tableau_sudoku_indice_solution;
-  let i_max = 0;
-
-  tableau_sudoku_valeur_possible[case_courante] = [1,2,3,4];
-
-  while(case_courante < 16){
-  	
-		verification_horizontal(tableau_sudoku,tableau_sudoku_valeur_possible[case_courante],case_courante);
-		verification_vertical(tableau_sudoku,tableau_sudoku_valeur_possible[case_courante],case_courante);
-		verification_blok(tableau_sudoku,tableau_sudoku_valeur_possible[case_courante],case_courante);/**/
-
-		let indice_a_enlever;
-
-		if(tableau_sudoku_valeur_possible[case_courante].length > 0){
-			let chiffre = (Math.floor(Math.random() * Math.floor(tableau_sudoku_valeur_possible[case_courante].length)));
-			tableau_sudoku[case_courante] = tableau_sudoku_valeur_possible[case_courante][chiffre];
-			case_courante++;
-			if(case_courante >= 16){
-
-				let case_a_enlever = true;
-				while(case_a_enlever){
-					etape_enlevage_de_case();
-					if(resoudre_le_sudoku_en_facile()){
-						case_a_enlever = false;
-						return [tableau_sudoku,tableau_sudoku_avec_case_vide];
-					}
-				}
-			}else{
-				tableau_sudoku_valeur_possible[case_courante] = [1,2,3,4];
-			}
-		}
-		else{
-			case_courante--;
-			indice_a_enlever = tableau_sudoku_valeur_possible[case_courante].indexOf(tableau_sudoku[case_courante]);
-			if(indice_a_enlever != -1){
-				tableau_sudoku_valeur_possible[case_courante].splice(indice_a_enlever, 1);
-				tableau_sudoku[case_courante] = "";
-			}
-		}
-  }
-
-
-	function etape_enlevage_de_case(){
-		tableau_sudoku_avec_case_vide = [ ... tableau_sudoku];
-
-		let i = 0;
-		let nombre_case_max_a_enlecer = 10;
-		while(i < 10){
-			let case_a_vider = (Math.floor(Math.random() * 16));
-			if(tableau_sudoku_avec_case_vide[case_a_vider] == ""){
-			}
-			else{
-				tableau_sudoku_avec_case_vide[case_a_vider] = "";
-				i++;
-			}
-		}
-
-		i = 0;
-		while(i<256){
-			i++;
-		}
-	}
-
-	function resoudre_le_sudoku_en_facile(){
-
-
-		let sol_tableau_sudoku_valeur = [ ... tableau_sudoku_avec_case_vide];
-		let sol_tableau_sudoku_valeur_avec_bonus = [ ... tableau_sudoku_avec_case_vide];
-		let sol_tableau_sudoku_indice_maitre = new Array(16).fill(0);
-		let i = 0;
-		let j = 0;
-
-		let nb_chiffre_decouvert = 0;
-		let nb_chiffre_decouvert_total = 0;
-
-		let stop = 0;
-	  while(!stop){
-	  	let i = 0;
-	  	while(i < 16){
-				if(sol_tableau_sudoku_valeur[i] == ""){
-					let testounet = [1,2,3,4];
-					verification_horizontal(sol_tableau_sudoku_valeur,testounet,i);
-					let testounet2 = [... testounet];
-
-					verification_vertical(sol_tableau_sudoku_valeur,testounet2,i);
-					let testounet3 = [... testounet2];
-
-					verification_blok(sol_tableau_sudoku_valeur,testounet3,i,true);
-					let testounet3b = [... testounet3];
-
-					sol_tableau_sudoku_indice_maitre[i] = testounet3b;
-				}
-
-				if(Array.isArray(sol_tableau_sudoku_indice_maitre[i])){
-					if(sol_tableau_sudoku_indice_maitre[i].length == 1){
-						sol_tableau_sudoku_valeur[i] = sol_tableau_sudoku_indice_maitre[i][0];
-						sol_tableau_sudoku_indice_maitre[i] = 0;
-						nb_chiffre_decouvert++;
-						nb_chiffre_decouvert_total++;
-					}
-				}
-				i++;
-			}				
-
-			if(nb_chiffre_decouvert_total == 10){
-				return true;
-			}
-			else if(nb_chiffre_decouvert == 0){
-				return false;
-			}
-
-			nb_chiffre_decouvert = 0;
-		}
-	}
+	let Sudoku_4x4 = sudoku.Sudoku(4,4);
+	return Sudoku_4x4;
 }
 
 
@@ -498,7 +352,6 @@ function creer_combo_sudoku_16_16_f(){
 
     tableau_sudoku_valeur_possible[case_courante] = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
 
-    //let interval_a_stop = setInterval(function(){
     while(case_courante<256){
 
 			if(i_max < case_courante){
@@ -677,12 +530,6 @@ function creer_combo_sudoku_16_16_f(){
 				}
 			}
     }
-//    }, 2);
-
-		let gudule = 0;
-		while(gudule < 256){
-	    gudule++;
-		}
 
 		let grille_correcte = false;
 		let tempous = false;
@@ -702,8 +549,6 @@ function creer_combo_sudoku_16_16_f(){
 					l++;
 				}
 				return [tableau_sudoku,tempous];
-				//console.log(tableau_sudoku);
-				//console.log(tempous);
 			}
 		}
 
@@ -814,13 +659,4 @@ function creer_combo_sudoku_16_16_f(){
 				}
 			}//,1000);
 		}
-}
-
-
-exports.creer_combo_sudoku = creer_combo_sudoku_f;
-
-function creer_combo_sudoku_f(){
-
-	let Sudoku_9x9 = sudoku.Sudoku(9,9);
-	return [Sudoku_9x9.tableau_sudoku,Sudoku_9x9.tableau_sudoku_avec_case_vide];
 }

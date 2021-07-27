@@ -1,6 +1,6 @@
 {
   "name": "mad5dsudoku",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "Create valid sudoku",
   "main": "index.js",
   "scripts": {

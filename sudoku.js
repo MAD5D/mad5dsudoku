@@ -91,6 +91,194 @@ exports.Sudoku = function Sudoku(largeur,hauteur){
 		}
 	}
 
+	this.creer_grille_16 = function(){
+		let case_courante = 0;
+    let tableau_sudoku_valeur_possible = new Array(256).fill(0);//
+    let tableau_sudoku_avec_case_vide;
+    let i_max = 0;
+
+    tableau_sudoku_valeur_possible[case_courante] = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
+
+    while(case_courante<256){
+
+			if(i_max < case_courante){
+				i_max = case_courante;
+			}
+
+			this.verification_horizontal(this.tableau_sudoku,tableau_sudoku_valeur_possible[case_courante],case_courante);
+			this.verification_vertical(this.tableau_sudoku,tableau_sudoku_valeur_possible[case_courante],case_courante);
+			this.verification_blok(this.tableau_sudoku,tableau_sudoku_valeur_possible[case_courante],case_courante);
+			
+			let indice_a_enlever;
+			let possible = true;
+
+			let colone_8 = case_courante%16;
+			if(colone_8 == 8){
+				let tableau_valeur_possible_etape_1 = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
+
+				//Vérification honrizontale
+				this.verification_horizontal(this.tableau_sudoku,tableau_valeur_possible_etape_1,case_courante);
+				let tableau_valeur_possible_etape_2_1 = [ ... tableau_valeur_possible_etape_1];
+				let tableau_valeur_possible_etape_2_2 = [ ... tableau_valeur_possible_etape_1];
+				let tableau_valeur_possible_etape_2_3 = [ ... tableau_valeur_possible_etape_1];
+				let tableau_valeur_possible_etape_2_4 = [ ... tableau_valeur_possible_etape_1];
+				let tableau_valeur_possible_etape_2_5 = [ ... tableau_valeur_possible_etape_1];
+				let tableau_valeur_possible_etape_2_6 = [ ... tableau_valeur_possible_etape_1];
+				let tableau_valeur_possible_etape_2_7 = [ ... tableau_valeur_possible_etape_1];
+				let tableau_valeur_possible_etape_2_8 = [ ... tableau_valeur_possible_etape_1];
+				//Vérification vertical
+				this.verification_vertical(this.tableau_sudoku,tableau_valeur_possible_etape_2_1,case_courante);
+				this.verification_vertical(this.tableau_sudoku,tableau_valeur_possible_etape_2_2,case_courante+1);
+				this.verification_vertical(this.tableau_sudoku,tableau_valeur_possible_etape_2_3,case_courante+2);
+				this.verification_vertical(this.tableau_sudoku,tableau_valeur_possible_etape_2_4,case_courante+3);
+				this.verification_vertical(this.tableau_sudoku,tableau_valeur_possible_etape_2_5,case_courante+4);
+				this.verification_vertical(this.tableau_sudoku,tableau_valeur_possible_etape_2_6,case_courante+5);
+				this.verification_vertical(this.tableau_sudoku,tableau_valeur_possible_etape_2_7,case_courante+6);
+				this.verification_vertical(this.tableau_sudoku,tableau_valeur_possible_etape_2_8,case_courante+7);
+
+				let tableau_valeur_possible_final = tableau_valeur_possible_etape_2_1.concat(tableau_valeur_possible_etape_2_2,tableau_valeur_possible_etape_2_3,tableau_valeur_possible_etape_2_4,tableau_valeur_possible_etape_2_5,tableau_valeur_possible_etape_2_6,tableau_valeur_possible_etape_2_7,tableau_valeur_possible_etape_2_8);
+
+				let tableau_valeur_possible_final_bis = [...new Set(tableau_valeur_possible_final)];
+				tableau_valeur_possible_final_bis.sort(function(a, b) {
+				  return a - b;
+				});
+
+				let tableau_valeur_possible_etape_3_1 = [ ... tableau_valeur_possible_final_bis];
+				let tableau_valeur_possible_etape_3_2 = [ ... tableau_valeur_possible_final_bis];
+				
+				//vérification blok
+				this.verification_blok(this.tableau_sudoku,tableau_valeur_possible_etape_3_1,case_courante);
+				this.verification_blok(this.tableau_sudoku,tableau_valeur_possible_etape_3_2,case_courante+4);
+
+				let tableau_valeur_possible_final_3 = tableau_valeur_possible_etape_3_1.concat(tableau_valeur_possible_etape_3_2);
+
+				let tableau_valeur_possible_final_3_bis = [...new Set(tableau_valeur_possible_final_3)];
+				if(tableau_valeur_possible_final_3_bis.length >= 8){
+
+				}
+				else{
+					possible = false;
+				}
+			}
+
+			let colone_4 = case_courante%16;
+
+      if(colone_4 == 12){
+        let tableau_valeur_possible_etape_1 = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
+
+        //Vérification honrizontale
+        this.verification_horizontal(this.tableau_sudoku,tableau_valeur_possible_etape_1,case_courante);
+        let tableau_valeur_possible_etape_2_1 = [ ... tableau_valeur_possible_etape_1];
+        let tableau_valeur_possible_etape_2_2 = [ ... tableau_valeur_possible_etape_1];
+        let tableau_valeur_possible_etape_2_3 = [ ... tableau_valeur_possible_etape_1];
+        let tableau_valeur_possible_etape_2_4 = [ ... tableau_valeur_possible_etape_1];
+
+        //Vérification vertical
+        this.verification_vertical(this.tableau_sudoku,tableau_valeur_possible_etape_2_1,case_courante);
+        this.verification_vertical(this.tableau_sudoku,tableau_valeur_possible_etape_2_2,case_courante+1);
+        this.verification_vertical(this.tableau_sudoku,tableau_valeur_possible_etape_2_3,case_courante+2);
+        this.verification_vertical(this.tableau_sudoku,tableau_valeur_possible_etape_2_4,case_courante+3);
+
+        let tableau_valeur_possible_final = tableau_valeur_possible_etape_2_1.concat(tableau_valeur_possible_etape_2_2,tableau_valeur_possible_etape_2_3,tableau_valeur_possible_etape_2_4);
+
+        let tableau_valeur_possible_final_bis = [...new Set(tableau_valeur_possible_final)];
+        tableau_valeur_possible_final_bis.sort(function(a, b) {
+          return a - b;
+        });
+
+        let tableau_valeur_possible_etape_3_1 = [ ... tableau_valeur_possible_final_bis];
+        let tableau_valeur_possible_etape_3_2 = [ ... tableau_valeur_possible_final_bis];
+
+        //vérification blok
+        this.verification_blok(this.tableau_sudoku,tableau_valeur_possible_etape_3_1,case_courante);
+
+        let tableau_valeur_possible_final_3 = tableau_valeur_possible_etape_3_1;
+        let tableau_valeur_possible_final_3_bis = [...new Set(tableau_valeur_possible_etape_3_1)];
+
+        if(tableau_valeur_possible_final_3_bis.length >= 4){
+
+        }
+        else{
+          possible = false;
+        }
+      }
+
+			//////FIN VERIF
+			if(tableau_sudoku_valeur_possible[case_courante].length > 0 && possible){
+				let chiffre = (Math.floor(Math.random() * Math.floor(tableau_sudoku_valeur_possible[case_courante].length)));
+				
+				this.tableau_sudoku[case_courante] = tableau_sudoku_valeur_possible[case_courante][chiffre];
+				case_courante++;
+				if(case_courante >= 256){
+					//clearInterval(interval_a_stop);
+				}else{
+					tableau_sudoku_valeur_possible[case_courante] = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
+				}
+			}
+			else{
+				if((case_courante%16) == 0 /*&& (i_max-case_courante) < 4*/){
+					case_courante = case_courante - 16;
+
+					i_max = case_courante;
+
+					indice_a_enlever = tableau_sudoku_valeur_possible[case_courante].indexOf(this.tableau_sudoku[case_courante]);
+					if(indice_a_enlever != -1){
+						tableau_sudoku_valeur_possible[case_courante].splice(indice_a_enlever, 1);
+            this.tableau_sudoku[case_courante] = "";
+            this.tableau_sudoku[case_courante+1] = "";
+            this.tableau_sudoku[case_courante+2] = "";
+            this.tableau_sudoku[case_courante+3] = "";
+            this.tableau_sudoku[case_courante+4] = "";
+            this.tableau_sudoku[case_courante+5] = "";
+            this.tableau_sudoku[case_courante+6] = "";
+            this.tableau_sudoku[case_courante+7] = "";
+            this.tableau_sudoku[case_courante+8] = "";
+            this.tableau_sudoku[case_courante+9] = "";
+            this.tableau_sudoku[case_courante+10] = "";
+            this.tableau_sudoku[case_courante+11] = "";
+            this.tableau_sudoku[case_courante+12] = "";
+            this.tableau_sudoku[case_courante+13] = "";
+            this.tableau_sudoku[case_courante+14] = "";
+            this.tableau_sudoku[case_courante+15] = "";
+            this.tableau_sudoku[case_courante+16] = "";
+					}
+				}
+				else if((case_courante%16) == 0 && (i_max-case_courante) < 8){
+					case_courante = case_courante - 9;
+
+					i_max = case_courante;
+
+					indice_a_enlever = tableau_sudoku_valeur_possible[case_courante].indexOf(tableau_sudoku[case_courante]);
+					if(indice_a_enlever != -1){
+						tableau_sudoku_valeur_possible[case_courante].splice(indice_a_enlever, 1);
+						tableau_sudoku[case_courante] = "";
+            tableau_sudoku[case_courante+1] = "";
+            tableau_sudoku[case_courante+2] = "";
+            tableau_sudoku[case_courante+3] = "";
+            tableau_sudoku[case_courante+4] = "";
+            tableau_sudoku[case_courante+5] = "";
+            tableau_sudoku[case_courante+6] = "";
+            tableau_sudoku[case_courante+7] = "";
+            tableau_sudoku[case_courante+8] = "";
+            tableau_sudoku[case_courante+9] = "";
+            tableau_sudoku[case_courante+10] = "";
+            tableau_sudoku[case_courante+11] = "";
+            tableau_sudoku[case_courante+12] = "";
+            tableau_sudoku[case_courante+13] = "";
+					}
+				}
+				else{
+					case_courante--;
+					indice_a_enlever = tableau_sudoku_valeur_possible[case_courante].indexOf(this.tableau_sudoku[case_courante]);
+					if(indice_a_enlever != -1){
+						tableau_sudoku_valeur_possible[case_courante].splice(indice_a_enlever, 1);
+						this.tableau_sudoku[case_courante] = "";
+					}
+				}
+			}
+    }
+	}
+
 	this.enlever_X_case_au_hasard = function(nb_case){
 		let tableau_sudoku_avec_case_vide = [ ... this.tableau_sudoku];
 
@@ -109,7 +297,6 @@ exports.Sudoku = function Sudoku(largeur,hauteur){
 
 	this.resoudre_le_sudoku_methode_facile = function(){
 		let tableau_sudoku_avec_case_vide = [ ... this.tableau_sudoku_avec_case_vide];
-		let sol_tableau_sudoku_editable = new Array(this.largeur*this.hauteur).fill(0);
 		let sol_tableau_sudoku_indice_maitre = new Array(this.largeur*this.hauteur).fill(0);
 
 		let i;
@@ -142,6 +329,7 @@ exports.Sudoku = function Sudoku(largeur,hauteur){
 			}
 		}
 
+		//A surveiller.
 		if(nb_case_vide != 0){
 			return false;
 		}
@@ -167,24 +355,41 @@ exports.Sudoku = function Sudoku(largeur,hauteur){
 		return liste_valeur_possible;
 	}
 
-	this.creer_grille();
+	if(this.largeur == 16){
+		//Génération de la grille 16x16
+		//Même algo que pour le 4x4 et le 9x9 mais avec optimisation.
+    this.creer_grille_16();
 
-	let sudoku_realise = 0;
+    let sudoku_realise = 0;
 
-	while(sudoku_realise == 0){
-		let tempo = "";
-		if(this.largeur*this.hauteur == 81){
-			this.tableau_sudoku_avec_case_vide = [ ... this.enlever_X_case_au_hasard(45)];
-		}
-		else if(this.largeur*this.hauteur == 16){
-			this.tableau_sudoku_avec_case_vide = [ ... this.enlever_X_case_au_hasard(10)];
-		}
+    while(sudoku_realise == 0){
+    	let tempo = "";
+    	this.tableau_sudoku_avec_case_vide = [ ... this.enlever_X_case_au_hasard(120)];
 
-		if(this.resoudre_le_sudoku_methode_facile() !== false){
-			sudoku_realise = 1;
+    	if(this.resoudre_le_sudoku_methode_facile() !== false){
+    		sudoku_realise = 1;
+    	}
+    }
+	}
+	else{
+		this.creer_grille();
+
+		let sudoku_realise = 0;
+
+		while(sudoku_realise == 0){
+			let tempo = "";
+			if(this.largeur*this.hauteur == 81){
+				this.tableau_sudoku_avec_case_vide = [ ... this.enlever_X_case_au_hasard(45)];
+			}
+			else if(this.largeur*this.hauteur == 16){
+				this.tableau_sudoku_avec_case_vide = [ ... this.enlever_X_case_au_hasard(10)];
+			}
+
+			if(this.resoudre_le_sudoku_methode_facile() !== false){
+				sudoku_realise = 1;
+			}
 		}
 	}
-	
 
 	return this;
 }

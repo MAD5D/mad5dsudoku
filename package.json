@@ -1,12 +1,12 @@
 {
   "name": "mad5dsudoku",
-  "version": "1.0.17",
-  "description": "Create valid sudoku",
+  "version": "1.0.18",
+  "description": "Create valid sudoku (4x4,9x9,16x16, ... 36x36 !!)",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Marc-Antoine DROUIN",
   "license": "ISC",
   "repository": {
     "type": "git",

@@ -289,35 +289,73 @@ exports.creer_combo_sudoku_36_36 = function(){
 
 
 
-exports.creer_combo_sudoku = creer_combo_sudoku_f;
 
-function creer_combo_sudoku_f(object = false){
-	let Sudoku_9x9 = sudoku.Sudoku(9,9);
-	if(object){
-		return Sudoku_9x9;
-	}
-	else{
-		return [Sudoku_9x9.tableau_sudoku,Sudoku_9x9.tableau_sudoku_avec_case_vide];
-	}
-}
+exports.create_sudoku_4x4 = create_sudoku_4x4;
 
-exports.creer_combo_sudoku_4_4 = creer_combo_sudoku_4_4_f;
-
-function creer_combo_sudoku_4_4_f(){
-	let Sudoku_4x4 = sudoku.Sudoku(4,4);
+function create_sudoku_4x4(grid = true,solution = true){
+	let Sudoku_4x4 = sudoku.Sudoku(4,4,grid,solution);
 	return Sudoku_4x4;
 }
-
-
-exports.creer_combo_sudoku_16_16 = creer_combo_sudoku_16_16_f;
-
-function creer_combo_sudoku_16_16_f(){
-	let Sudoku_16x16 = sudoku.Sudoku(16,16);
-	return [Sudoku_16x16.tableau_sudoku,Sudoku_16x16.tableau_sudoku_avec_case_vide];
+/**
+ * @deprecated Will be deleted in version 2.0. please use create_sudoku_4x4 (return object instead of array)
+ */
+exports.creer_combo_sudoku_4_4 = creer_combo_sudoku_4_4_f;
+/**
+ * @deprecated Will be deleted in version 2.0. please use create_sudoku_4x4 (return object instead of array)
+ */
+function creer_combo_sudoku_4_4_f(){
+	console.warn('\x1b[41m%s\x1b[0m%s', 'WARNING :'," creer_combo_sudoku_4_4 is deprecated and will be remove in v2.0.0, please use create_sudoku_4x4 (return object instead of array).");
+	let Sudoku_4x4 = sudoku.Sudoku(4,4);
+	return [Sudoku_4x4.full_grid,Sudoku_4x4.grid_with_holes];
 }
 
-exports.creer_combo_sudoku_1_1 = creer_combo_sudoku_1_1_f;//   ¯\_(⊙︿⊙)_/¯   //
+exports.create_sudoku_9x9 = create_sudoku_9x9;
 
-function creer_combo_sudoku_1_1_f(){
-	return [[1],['']];
+function create_sudoku_9x9(grid = true,solution = true){
+	let Sudoku_9x9 = sudoku.Sudoku(9,9,grid,solution);
+	return Sudoku_9x9;
+}
+
+/**
+ * @deprecated Will be deleted in version 2.0. please use create_sudoku_9x9 (return object instead of array)
+ */
+exports.creer_combo_sudoku = creer_combo_sudoku_f;
+/**
+ * @deprecated Will be deleted in version 2.0. please use create_sudoku_9x9 (return object instead of array)
+ */
+function creer_combo_sudoku_f(){
+	console.warn('\x1b[41m%s\x1b[0m%s', 'WARNING :'," creer_combo_sudoku is deprecated and will be remove in v2.0.0, please use create_sudoku_9x9 (return object instead of array).");
+	let Sudoku_9x9 = sudoku.Sudoku(9,9);
+	return [Sudoku_9x9.full_grid,Sudoku_9x9.grid_with_holes];
+}
+
+
+exports.create_sudoku_16x16 = create_sudoku_16x16;
+
+function create_sudoku_16x16(grid = true,solution = true){
+	let Sudoku_16x16 = sudoku.Sudoku(16,16,grid,solution);
+	return Sudoku_16x16;
+}
+/**
+ * @deprecated Will be deleted in version 2.0. please use create_sudoku_16x16 (return object instead of array)
+ */
+exports.creer_combo_sudoku_16_16 = creer_combo_sudoku_16_16_f;
+/**
+ * @deprecated Will be deleted in version 2.0. please use create_sudoku_16x16 (return object instead of array)
+ */
+function creer_combo_sudoku_16_16_f(){
+	console.warn('\x1b[41m%s\x1b[0m%s', 'WARNING :'," creer_combo_sudoku_16_16 is deprecated and will be remove in v2.0.0, please use create_sudoku_16x16 (return object instead of array).");
+	let Sudoku_16x16 = sudoku.Sudoku(16,16);
+	return [Sudoku_16x16.full_grid,Sudoku_16x16.grid_with_holes];
+}
+
+
+exports.create_sudoku_1x1 = create_sudoku_1x1;//   ¯\_(⊙︿⊙)_/¯   //
+
+function create_sudoku_1x1(grid = false){
+	let Sudoku_1x1 = sudoku.Sudoku(1,1,grid);
+	Sudoku_1x1.full_grid = [1];
+	Sudoku_1x1.grid_with_holes = [''];
+
+	return Sudoku_1x1;
 }

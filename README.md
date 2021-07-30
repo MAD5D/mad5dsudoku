@@ -14,7 +14,32 @@ Sudoku generator [node.js]
 
 ``` javascript
 	const sudoku = require('mad5dsudoku');
+
+	//Create a full random 4x4 sudoku
+	let sudoku = sudoku.create_sudoku_4x4();
+	//Create full random 9x9 sudoku
+	let sudoku = sudoku.create_sudoku_9x9();
+	//Create a full random 16x16 sudoku
+	let sudoku = sudoku.create_sudoku_16x16();
+
+	puzzle     = sudoku.grid_with_holes;
+	solution   = sudoku.full_grid;
+
+
+	//Create a PARTIAL random 36x36 sudoku
+	//Be carefull, it's very envy for the CPU. Optimization in progress.
+	let double_tableau = sudoku.creer_combo_sudoku_36_36();
+
+	puzzle     = double_tableau[1];
+	solution   = double_tableau[0];
+```
+## Usage(old, depreciated)
+
+``` javascript
 	
+	//BREAK CHANGE, BE CAREFULL
+	//This old method will be delete the 01/09/2021 (dd/mm/aaaa)
+	const sudoku = require('mad5dsudoku');
 	//Create full random 9x9 sudoku
 	let double_tableau = sudoku.creer_combo_sudoku();
 	//Create a full random 4x4 sudoku

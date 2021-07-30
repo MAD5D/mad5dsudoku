@@ -304,7 +304,7 @@ exports.creer_combo_sudoku_4_4 = creer_combo_sudoku_4_4_f;
  * @deprecated Will be deleted in version 2.0. please use create_sudoku_4x4 (return object instead of array)
  */
 function creer_combo_sudoku_4_4_f(){
-	console.warn('\x1b[41m%s\x1b[0m%s', 'WARNING :'," creer_combo_sudoku_4_4 is deprecated and will be remove in v2.0.0, please use create_sudoku_4x4 (return object instead of array).");
+	console.warn('\x1b[41m%s\x1b[0m%s', 'WARNING :'," creer_combo_sudoku_4_4 is deprecated and will be remove the 01/09/2021, please use create_sudoku_4x4 (return object instead of array).");
 	let Sudoku_4x4 = sudoku.Sudoku(4,4);
 	return [Sudoku_4x4.full_grid,Sudoku_4x4.grid_with_holes];
 }
@@ -324,7 +324,7 @@ exports.creer_combo_sudoku = creer_combo_sudoku_f;
  * @deprecated Will be deleted in version 2.0. please use create_sudoku_9x9 (return object instead of array)
  */
 function creer_combo_sudoku_f(){
-	console.warn('\x1b[41m%s\x1b[0m%s', 'WARNING :'," creer_combo_sudoku is deprecated and will be remove in v2.0.0, please use create_sudoku_9x9 (return object instead of array).");
+	console.warn('\x1b[41m%s\x1b[0m%s', 'WARNING :'," creer_combo_sudoku is deprecated and will be remove the 01/09/2021, please use create_sudoku_9x9 (return object instead of array).");
 	let Sudoku_9x9 = sudoku.Sudoku(9,9);
 	return [Sudoku_9x9.full_grid,Sudoku_9x9.grid_with_holes];
 }
@@ -344,7 +344,7 @@ exports.creer_combo_sudoku_16_16 = creer_combo_sudoku_16_16_f;
  * @deprecated Will be deleted in version 2.0. please use create_sudoku_16x16 (return object instead of array)
  */
 function creer_combo_sudoku_16_16_f(){
-	console.warn('\x1b[41m%s\x1b[0m%s', 'WARNING :'," creer_combo_sudoku_16_16 is deprecated and will be remove in v2.0.0, please use create_sudoku_16x16 (return object instead of array).");
+	console.warn('\x1b[41m%s\x1b[0m%s', 'WARNING :'," creer_combo_sudoku_16_16 is deprecated and will be remove the 01/09/2021, please use create_sudoku_16x16 (return object instead of array).");
 	let Sudoku_16x16 = sudoku.Sudoku(16,16);
 	return [Sudoku_16x16.full_grid,Sudoku_16x16.grid_with_holes];
 }

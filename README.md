@@ -13,14 +13,14 @@ Sudoku generator [node.js]
 ## Usage
 
 ``` javascript
-	const sudoku = require('mad5dsudoku');
+	const mad5dsudoku = require('mad5dsudoku');
 
 	//Create a full random 4x4 sudoku
-	let sudoku = sudoku.create_sudoku_4x4();
+	let sudoku = mad5dsudoku.create_sudoku_4x4();
 	//Create full random 9x9 sudoku
-	let sudoku = sudoku.create_sudoku_9x9();
+	let sudoku = mad5dsudoku.create_sudoku_9x9();
 	//Create a full random 16x16 sudoku
-	let sudoku = sudoku.create_sudoku_16x16();
+	let sudoku = mad5dsudoku.create_sudoku_16x16();
 
 	puzzle     = sudoku.grid_with_holes;
 	solution   = sudoku.full_grid;

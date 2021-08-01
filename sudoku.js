@@ -297,16 +297,51 @@ exports.Sudoku = function Sudoku(largeur,hauteur,grille = true,solution = true){
 
 	this.create_empty_case = function(){
 		if(this.largeur*this.hauteur == 81){
-			this.grid_with_holes = [ ... this.enlever_X_case_au_hasard(45)];
+			this.grid_with_holes = [ ... this.enlever_X_case_au_hasard(55)];
 		}
 		else if(this.largeur*this.hauteur == 16){
 			this.grid_with_holes = [ ... this.enlever_X_case_au_hasard(10)];
 		}
 	}
 
-	this.solve = function(){
+	this.solve = function(solution_deja_existante = false){
 		if(this.grid_with_holes.length == this.largeur*this.hauteur){
-			return this.resoudre_le_sudoku_methode_facile();	
+			let resultat = this.resoudre_le_sudoku_methode_facile();
+			let ii = 0;
+			while(resultat[0] == false && ii < 11){
+				//console.log('!!!!!!!!!!!!!!!!!!!');
+				//console.log(resultat[0]);
+				//console.log(resultat[1]);
+				//remplir un chiffre 'au hazard'
+				if(solution_deja_existante){
+					let i = 0;
+					let liste_indice_case_vide = new Array();
+					while(i < this.grid_with_holes.length){
+						if(resultat[1][i] == ''){
+							liste_indice_case_vide.push(i);
+						}
+						i++;
+					}
+					let indice_triche = liste_indice_case_vide[Math.floor(Math.random() * liste_indice_case_vide.length)];
+					this.grid_with_holes[indice_triche] = this.full_grid[indice_triche];
+					resultat[1][indice_triche] = this.full_grid[indice_triche];
+
+					resultat = this.resoudre_le_sudoku_methode_facile(resultat[1]);
+				}
+				ii++;
+			}
+
+			if(ii >= 10){
+				//console.log('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT');
+				//console.log('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT');
+			}
+
+			//console.log(this.grid_with_holes);
+			/*if(resultat[0] == false){
+				this.resoudre_le_sudoku_methode_force_brut();
+			}*/
+
+			return resultat;	
 		}
 		else{
 			console.log(`No sudoku.`);
@@ -315,8 +350,43 @@ exports.Sudoku = function Sudoku(largeur,hauteur,grille = true,solution = true){
 		
 	}
 
-	this.resoudre_le_sudoku_methode_facile = function(){
-		let tableau_sudoku_avec_case_vide = [ ... this.grid_with_holes];
+	this.resoudre_le_sudoku_methode_force_brut = function(){
+		
+		console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+
+		let liste_tableau_de_valeur_possible = new Array();
+
+		let copie_sudoku_a_resoudre = [... this.grid_with_holes];
+
+		let nombre_de_case = this.largeur*this.hauteur;
+		let nb_case_vide = 0;
+		let liste_indice_case_vide
+		let i = 0;
+		while(i < nombre_de_case){
+			if(copie_sudoku_a_resoudre[i] == ''){
+				nb_case_vide ++;
+			}
+			i++;
+		}
+
+		//let case_courante = 0;
+
+		//let tableau_sudoku_valeur_possible = new Array().fill(0);
+		//tableau_sudoku_valeur_possible[case_courante] = this.valeur_possible(copie_sudoku_a_resoudre,case_courante);
+		
+	}
+
+	this.resoudre_le_sudoku_methode_facile = function(grille_personalise = false){
+		//console.log(grille_personalise);
+		let tableau_sudoku_avec_case_vide;
+		if(grille_personalise !== false){
+			tableau_sudoku_avec_case_vide = [ ... grille_personalise];
+			//console.log(tableau_sudoku_avec_case_vide);
+		}
+		else{
+			tableau_sudoku_avec_case_vide = [ ... this.grid_with_holes];	
+		}
+		
 		let sol_tableau_sudoku_indice_maitre = new Array(this.largeur*this.hauteur).fill(0);
 
 		let i;
@@ -351,11 +421,11 @@ exports.Sudoku = function Sudoku(largeur,hauteur,grille = true,solution = true){
 
 		//A surveiller.
 		if(nb_case_vide != 0){
-			return false;
+			return [false,tableau_sudoku_avec_case_vide];
 		}
 		else{
 			this.full_grid = [... tableau_sudoku_avec_case_vide];
-			return tableau_sudoku_avec_case_vide;
+			return [true,tableau_sudoku_avec_case_vide];
 		}
 	}
 
@@ -387,7 +457,7 @@ exports.Sudoku = function Sudoku(largeur,hauteur,grille = true,solution = true){
     	let tempo = "";
     	this.grid_with_holes = [ ... this.enlever_X_case_au_hasard(120)];
 
-    	if(this.solve() !== false){
+    	if(this.solve()[0] !== false){
     		sudoku_realise = 1;
     	}
     }
@@ -405,7 +475,7 @@ exports.Sudoku = function Sudoku(largeur,hauteur,grille = true,solution = true){
 				let tempo = "";
 				this.create_empty_case();
 
-				if(this.solve() !== false){
+				if(this.solve(true)[0] !== false){
 					sudoku_realise = 1;
 				}
 			}

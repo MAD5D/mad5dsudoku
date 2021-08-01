@@ -1,6 +1,6 @@
 {
   "name": "mad5dsudoku",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "Create valid sudoku (4x4,9x9,16x16, ... 36x36 !!)",
   "main": "index.js",
   "scripts": {
